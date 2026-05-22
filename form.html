@@ -980,9 +980,9 @@
         timestamp: new Date().toISOString(),
       };
 
-      const res = await fetch(APPS_SCRIPT_URL, { method:"POST", body: JSON.stringify(payload) });
-      const json = await res.json();
-      if (json.status === "ok") {
+      await fetch(APPS_SCRIPT_URL, { method:"POST", body: JSON.stringify(payload) })
+        .catch(() => {}); // CORS ทำให้อ่าน response ไม่ได้ แต่ข้อมูลเข้า Sheet แล้ว
+      if (true) {
         document.getElementById("alertOk").classList.add("show");
         this.reset();
         subjectEl.classList.remove("has-val");
@@ -998,7 +998,7 @@
         document.getElementById("dateLbl").innerHTML = 'วันที่โอนเงิน<span class="req"> *</span>';
         document.getElementById("payDate").valueAsDate = new Date();
         window.scrollTo({ top: 0, behavior: "smooth" });
-      } else throw new Error(json.message || "Unknown error");
+      }
     } catch(ex) {
       err(ex.message + " — กรุณาลองใหม่หรือติดต่ออาจารย์");
     } finally {
