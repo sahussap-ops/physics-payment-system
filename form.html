@@ -602,6 +602,89 @@
   }
   @keyframes rot { to { transform: rotate(360deg); } }
 
+  /* ── SUCCESS SCREEN ── */
+  .success-screen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 52px 40px 48px;
+    animation: rise .6s cubic-bezier(.16,1,.3,1) both;
+  }
+  .success-screen.show { display: flex; }
+
+  .success-ring {
+    position: relative;
+    width: 110px; height: 110px;
+    margin-bottom: 28px;
+  }
+  .success-ring svg.ring {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    animation: spinRing 1s cubic-bezier(.16,1,.3,1) both .1s;
+  }
+  @keyframes spinRing {
+    from { opacity:0; transform: rotate(-90deg) scale(.6); }
+    to   { opacity:1; transform: rotate(0deg)   scale(1);  }
+  }
+  .success-ring .check-wrap {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .success-ring svg.check {
+    width: 46px; height: 46px;
+    animation: popCheck .4s cubic-bezier(.16,1,.3,1) both .5s;
+  }
+  @keyframes popCheck {
+    from { opacity:0; transform:scale(0) rotate(-20deg); }
+    to   { opacity:1; transform:scale(1) rotate(0deg); }
+  }
+  .success-title {
+    font-size: 24px; font-weight: 800;
+    color: var(--text);
+    margin-bottom: 10px;
+  }
+  .success-sub {
+    font-size: 15px; color: var(--sub);
+    line-height: 1.6;
+    max-width: 320px;
+    margin-bottom: 28px;
+  }
+  .success-info {
+    background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+    border: 1.5px solid #86efac;
+    border-radius: 16px;
+    padding: 20px 24px;
+    width: 100%;
+    max-width: 380px;
+    margin-bottom: 32px;
+    text-align: left;
+  }
+  .si-row {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 14px; color: #166534;
+    padding: 5px 0;
+  }
+  .si-row + .si-row { border-top: 1px solid #bbf7d0; }
+  .si-row .si-icon { font-size: 17px; flex-shrink: 0; }
+  .si-row .si-label { color: #4ade80; font-weight: 600; width: 80px; flex-shrink: 0; }
+  .si-row .si-val { font-weight: 700; }
+
+  .btn-again {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    color: #fff; border: none; border-radius: 14px;
+    padding: 14px 32px; font-family: inherit;
+    font-size: 15px; font-weight: 700; cursor: pointer;
+    box-shadow: 0 6px 24px rgba(79,70,229,0.35);
+    transition: transform .15s, box-shadow .2s;
+  }
+  .btn-again:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 32px rgba(79,70,229,0.45);
+  }
+  .btn-again svg { width: 17px; height: 17px; }
+
   /* ── FOOTER ── */
   .card-foot {
     background: linear-gradient(to right, #f8fafc, #f1f5f9);
@@ -856,6 +939,77 @@
       </form>
     </div>
 
+    <!-- ─── SUCCESS SCREEN ─── -->
+    <div class="success-screen" id="successScreen">
+      <div class="success-ring">
+        <!-- Ring -->
+        <svg class="ring" viewBox="0 0 110 110" fill="none">
+          <circle cx="55" cy="55" r="50"
+            stroke="#d1fae5" stroke-width="6"/>
+          <circle cx="55" cy="55" r="50"
+            stroke="#10b981" stroke-width="6"
+            stroke-linecap="round"
+            stroke-dasharray="314"
+            stroke-dashoffset="0"
+            transform="rotate(-90 55 55)">
+            <animate attributeName="stroke-dashoffset"
+              from="314" to="0" dur=".8s"
+              fill="freeze" calcMode="spline"
+              keySplines="0.16 1 0.3 1"/>
+          </circle>
+        </svg>
+        <!-- Check -->
+        <div class="check-wrap">
+          <svg class="check" viewBox="0 0 46 46" fill="none">
+            <path d="M10 24l10 10 18-18"
+              stroke="#10b981" stroke-width="4"
+              stroke-linecap="round" stroke-linejoin="round">
+              <animate attributeName="stroke-dashoffset"
+                from="60" to="0" dur=".4s" begin=".5s"
+                fill="freeze"/>
+            </path>
+          </svg>
+        </div>
+      </div>
+
+      <div class="success-title">แจ้งชำระเงินสำเร็จ! 🎉</div>
+      <div class="success-sub">
+        ระบบได้รับข้อมูลของคุณเรียบร้อยแล้ว<br/>
+        อาจารย์จะตรวจสอบและยืนยันการชำระเงินภายหลัง
+      </div>
+
+      <div class="success-info">
+        <div class="si-row">
+          <span class="si-icon">🎓</span>
+          <span class="si-label">ชื่อ</span>
+          <span class="si-val" id="si-name">—</span>
+        </div>
+        <div class="si-row">
+          <span class="si-icon">📖</span>
+          <span class="si-label">วิชา</span>
+          <span class="si-val" id="si-subject">—</span>
+        </div>
+        <div class="si-row">
+          <span class="si-icon">💳</span>
+          <span class="si-label">วิธีชำระ</span>
+          <span class="si-val" id="si-method">—</span>
+        </div>
+        <div class="si-row">
+          <span class="si-icon">💰</span>
+          <span class="si-label">จำนวนเงิน</span>
+          <span class="si-val" id="si-amount">—</span>
+        </div>
+      </div>
+
+      <button class="btn-again" id="btnAgain">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+          <path d="M3 3v5h5"/>
+        </svg>
+        แจ้งชำระเงินอีกครั้ง
+      </button>
+    </div>
+
     <!-- FOOTER -->
     <div class="card-foot">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -980,31 +1134,54 @@
         timestamp: new Date().toISOString(),
       };
 
+      // เก็บข้อมูลไว้แสดงหน้า success
+      const snapName    = payload.studentName;
+      const snapSubject = payload.subject;
+      const snapMethod  = payload.payMethod;
+      const snapAmount  = Number(payload.amount).toLocaleString("th-TH") + " บาท";
+
       await fetch(APPS_SCRIPT_URL, { method:"POST", body: JSON.stringify(payload) })
         .catch(() => {}); // CORS ทำให้อ่าน response ไม่ได้ แต่ข้อมูลเข้า Sheet แล้ว
-      if (true) {
-        document.getElementById("alertOk").classList.add("show");
-        this.reset();
-        subjectEl.classList.remove("has-val");
-        document.getElementById("upArea").classList.remove("filled");
-        document.getElementById("upIcon").textContent  = "📎";
-        document.getElementById("upTitle").textContent = "คลิกหรือลากสลิปมาวางที่นี่";
-        document.getElementById("upHint").textContent  = "รองรับ JPG, PNG, PDF · ไม่เกิน 5 MB";
-        document.getElementById("preview-wrap").style.display = "none";
-        document.getElementById("slipWrap").classList.remove("gone");
-        document.getElementById("cashBanner").classList.remove("show");
-        document.getElementById("proxyRow").classList.remove("on");
-        document.getElementById("proxySlide").classList.remove("open");
-        document.getElementById("dateLbl").innerHTML = 'วันที่โอนเงิน<span class="req"> *</span>';
-        document.getElementById("payDate").valueAsDate = new Date();
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      }
+
+      // แสดงหน้า success
+      document.getElementById("si-name").textContent    = snapName;
+      document.getElementById("si-subject").textContent = snapSubject;
+      document.getElementById("si-method").textContent  = snapMethod;
+      document.getElementById("si-amount").textContent  = snapAmount;
+
+      // ซ่อนฟอร์ม + แสดง success screen
+      document.getElementById("form").style.display = "none";
+      document.getElementById("alertErr").classList.remove("show");
+      document.getElementById("successScreen").classList.add("show");
+      window.scrollTo({ top: 0, behavior: "smooth" });
     } catch(ex) {
       err(ex.message + " — กรุณาลองใหม่หรือติดต่ออาจารย์");
     } finally {
       btn.disabled = false;
       inn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2 11 13M22 2 15 22l-4-9-9-4 20-7z"/></svg> ส่งหลักฐานการชำระเงิน`;
     }
+  });
+
+  // ── ปุ่มแจ้งอีกครั้ง ──
+  document.getElementById("btnAgain").addEventListener("click", function() {
+    document.getElementById("successScreen").classList.remove("show");
+    document.getElementById("form").style.display = "";
+
+    // reset ฟอร์ม
+    document.getElementById("form").reset();
+    subjectEl.classList.remove("has-val");
+    document.getElementById("upArea").classList.remove("filled");
+    document.getElementById("upIcon").textContent  = "📎";
+    document.getElementById("upTitle").textContent = "คลิกหรือลากสลิปมาวางที่นี่";
+    document.getElementById("upHint").textContent  = "รองรับ JPG, PNG, PDF · ไม่เกิน 5 MB";
+    document.getElementById("preview-wrap").style.display = "none";
+    document.getElementById("slipWrap").classList.remove("gone");
+    document.getElementById("cashBanner").classList.remove("show");
+    document.getElementById("proxyRow").classList.remove("on");
+    document.getElementById("proxySlide").classList.remove("open");
+    document.getElementById("dateLbl").innerHTML = 'วันที่โอนเงิน<span class="req"> *</span>';
+    document.getElementById("payDate").valueAsDate = new Date();
+    window.scrollTo({ top: 0, behavior: "smooth" });
   });
 
   function toB64(file) {
